@@ -7,7 +7,7 @@
 <meta name="app-version" content="1.0.1">
 <title>Study Way 2</title>
 
-<!-- ✅ مهم لـ PWA -->
+<!-- ===== PWA ===== -->
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0b1f33">
 
@@ -181,6 +181,7 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+/* ===== التنقل ===== */
 const pages=["home","program","app","settings"];
 function show(id){
   pages.forEach(p=>document.getElementById(p).style.display="none");
@@ -191,6 +192,7 @@ function openProgram(){show("program")}
 function openApp(){show("app")}
 function settings(){show("settings")}
 
+/* ===== الساعة ===== */
 function updateClock(){
   const n=new Date();
   clock.textContent=n.toLocaleTimeString();
@@ -198,20 +200,22 @@ function updateClock(){
 }
 setInterval(updateClock,1000);updateClock();
 
+/* ===== العد التنازلي ===== */
 function updateCountdown(){
   const now=new Date();
-  let target=new Date(now.getFullYear(),0,7);
-  if(now>target) target=new Date(now.getFullYear()+1,0,7);
+  let target=new Date(now.getFullYear(),0,7,0,0,0);
+  if(now>target) target=new Date(now.getFullYear()+1,0,7,0,0,0);
   const diff=target-now;
   countdown.textContent=Math.floor(diff/86400000)+" يوم";
 }
 setInterval(updateCountdown,1000);updateCountdown();
 
+/* ===== الخطط ===== */
 function addPlan(){
   if(!planText.value||!planTime.value)return;
   plans.innerHTML+=`<div class="item">
-  <button class="delete" onclick="this.parentElement.remove()">X</button>
-  ${planText.value} ⏰ ${planTime.value}
+    <button class="delete" onclick="this.parentElement.remove()">X</button>
+    ${planText.value} ⏰ ${planTime.value}
   </div>`;
   planText.value="";planTime.value="";
 }
@@ -219,12 +223,13 @@ function addPlan(){
 function addDone(){
   if(!doneText.value)return;
   doneList.innerHTML+=`<div class="item">
-  <button class="delete" onclick="this.parentElement.remove()">X</button>
-  ${doneText.value}
+    <button class="delete" onclick="this.parentElement.remove()">X</button>
+    ${doneText.value}
   </div>`;
   doneText.value="";
 }
 
+/* ===== السمات ===== */
 function theme(bg,main){
   document.documentElement.style.setProperty("--bg",bg);
   document.documentElement.style.setProperty("--main",main);
