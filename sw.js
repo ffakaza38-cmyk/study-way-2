@@ -1,12 +1,12 @@
 const CACHE_NAME = "study-way-2-v2";
 
 const FILES_TO_CACHE = [
-  "./",
-  "./index.html",
-  "./manifest.json"
+  "/",
+  "/index.html",
+  "/manifest.json"
 ];
 
-// تثبيت
+// install
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
@@ -16,7 +16,7 @@ self.addEventListener("install", event => {
   self.skipWaiting();
 });
 
-// تفعيل
+// activate
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -32,7 +32,7 @@ self.addEventListener("activate", event => {
   self.clients.claim();
 });
 
-// جلب
+// fetch
 self.addEventListener("fetch", event => {
   event.respondWith(
     caches.match(event.request).then(response => {
