@@ -1,4 +1,5 @@
-const CACHE_NAME = "study-way-2-v1";
+const CACHE_NAME = "study-way-2-v2";
+
 const FILES_TO_CACHE = [
   "./",
   "./index.html",
@@ -6,32 +7,36 @@ const FILES_TO_CACHE = [
 ];
 
 // تثبيت
-self.addEventListener("install", e => {
-  self.skipWaiting();
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(FILES_TO_CACHE);
+    })
   );
+  self.skipWaiting();
 });
 
 // تفعيل
-self.addEventListener("activate", e => {
-  e.waitUntil(
+self.addEventListener("activate", event => {
+  event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.map(k => k !== CACHE_NAME && caches.delete(k)))
+      Promise.all(
+        keys.map(key => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      )
     )
   );
   self.clients.claim();
 });
 
 // جلب
-self.addEventListener("fetch", e => {
-  e.respondWith(
-    fetch(e.request)
-      .then(res => {
-        const resClone = res.clone();
-        caches.open(CACHE_NAME).then(c => c.put(e.request, resClone));
-        return res;
-      })
-      .catch(() => caches.match(e.request))
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
   );
 });
