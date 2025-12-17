@@ -2,8 +2,14 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <meta name="app-version" content="1.0.1">
 <title>Study Way 2</title>
+
+<!-- ✅ مهم لـ PWA -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0b1f33">
 
 <style>
 :root{
@@ -105,7 +111,6 @@ button{
   margin-top:10px;
 }
 
-/* ===== الفوتر ===== */
 .footer{
   text-align:center;
   padding:15px;
@@ -164,12 +169,18 @@ button{
   <button onclick="theme('#1c1c1c','#d4af37')">🟨 ذهبي</button>
 </div>
 
-<!-- ===== فوتر الموقع ===== -->
 <div class="footer">
   🌐 <a href="https://8-cmyk.github.io" target="_blank">موقعنا الرسمي</a>
 </div>
 
 <script>
+/* ===== Service Worker ===== */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js");
+  });
+}
+
 const pages=["home","program","app","settings"];
 function show(id){
   pages.forEach(p=>document.getElementById(p).style.display="none");
@@ -192,8 +203,7 @@ function updateCountdown(){
   let target=new Date(now.getFullYear(),0,7);
   if(now>target) target=new Date(now.getFullYear()+1,0,7);
   const diff=target-now;
-  countdown.textContent=
-   Math.floor(diff/86400000)+" يوم";
+  countdown.textContent=Math.floor(diff/86400000)+" يوم";
 }
 setInterval(updateCountdown,1000);updateCountdown();
 
@@ -219,19 +229,6 @@ function theme(bg,main){
   document.documentElement.style.setProperty("--bg",bg);
   document.documentElement.style.setProperty("--main",main);
 }
-
-/* ===== التحديث ===== */
-const CURRENT_VERSION="1.0.1";
-fetch(location.href,{cache:"no-store"})
-.then(r=>r.text())
-.then(t=>{
-  const v=t.match(/app-version" content="([^"]+)"/);
-  if(v && v[1]!==CURRENT_VERSION){
-    if(confirm("🚀 تحديث جديد متوفر، تحديث الآن؟")){
-      location.reload(true);
-    }
-  }
-});
 </script>
 
 </body>
