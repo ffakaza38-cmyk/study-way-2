@@ -1,7 +1,8 @@
 {
   "name": "Study Way 2",
   "short_name": "StudyWay2",
-  "start_url": "./index.html",
+  "start_url": "/study-way-2/",
+  "scope": "/study-way-2/",
   "display": "standalone",
   "background_color": "#0b1f33",
   "theme_color": "#0b1f33",
